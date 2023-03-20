@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SourceGenerator": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "..\\Autowatchers.Net6\\Autowatchers.Net6.csproj"
+    }
+  }
+}

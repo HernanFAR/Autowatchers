@@ -1,0 +1,60 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <Version>1.0.0.0</Version>
+      <TargetFramework>netstandard2.0</TargetFramework>
+	  <LangVersion>latest</LangVersion>
+	  <Nullable>enable</Nullable>
+	  <Authors>Hernán Álvarez</Authors>
+	  <Title>Autowatchers</Title>
+	  <PackageId>Autowatchers</PackageId>
+	  <Description>This project uses Source Generation to create classes like to Vue.js Watchers in C#.</Description>
+	  <PackageTags>watcher;SourceGenerator;Generation;Generate</PackageTags>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
+
+	  <IsRoslynComponent>true</IsRoslynComponent>
+	  <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+	  <CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath>
+	  <IncludeBuildOutput>false</IncludeBuildOutput>
+	  <DevelopmentDependency>true</DevelopmentDependency>
+	  <ImplicitUsings>enable</ImplicitUsings>
+	  <Configurations>Debug;Release;DebugAttach</Configurations>
+  </PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Remove="bin\**" />
+		<EmbeddedResource Remove="bin\**" />
+		<None Remove="bin\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="FileGenerators\Autowatchers.*.cs">
+			<DependentUpon>Autowatchers.cs</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.5.0" />
+    <PackageReference Include="PolySharp" Version="1.12.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+	<ItemGroup>
+		<None Remove="bin\Debug\netstandard2.0\\Autowatchers.dll" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+	</ItemGroup>
+
+</Project>
