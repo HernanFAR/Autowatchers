@@ -1,6 +1,5 @@
 ﻿using Autowatchers.FileGenerators;
 using Microsoft.CodeAnalysis;
-using System.Xml.Linq;
 
 namespace Autowatchers.Models;
 
@@ -14,7 +13,7 @@ internal class ClassSymbol
 
     public string ClassName => ClassData.ShortClassName;
 
-    public string FullBuilderClassName => ClassData.FullClassName;
+    public string FullClassName => ClassData.FullClassName;
 
     public INamedTypeSymbol NamedTypeSymbol { get; init; } = null!;
 
@@ -37,8 +36,8 @@ internal class ClassSymbol
             .Where(x => x.SetMethod!.DeclaredAccessibility == Accessibility.Public)
             .Where(x => x.CanBeReferencedByName)
             .Where(p => !p.GetAttributes()
-                .Any(a => 
+                .Any(a =>
                     AutowatcherAttributeGenerator.AutowatcherExcludeAttributePropertyNames.Contains(a.AttributeClass?.OriginalDefinition.ToString())));
-        
+
     }
 }

@@ -21,7 +21,7 @@
             {
                 Console.WriteLine($"Se ha escrito la propiedad PhoneNumber: Nuevo valor: {newValue} y antiguo valor: {oldValue}.");
             };
-
+            
             dummyWatch.NameChanged += nameFunc;
             dummyWatch.EmailChanged += emailFunc;
             dummyWatch.PhoneNumberChanged += phoneNumberFunc;

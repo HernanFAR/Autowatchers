@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Autowatchers.Models;
+﻿namespace Autowatchers.Models;
 
 internal struct ClassData
 {
@@ -11,7 +7,7 @@ internal struct ClassData
     public string ShortClassName { get; init; }
 
     public string FullClassName { get; init; }
-    
+
     public string MetadataName { get; init; }
 
     public List<string> Usings { get; init; }

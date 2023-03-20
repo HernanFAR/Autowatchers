@@ -1,11 +1,8 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
+﻿using Autowatchers.Models;
 using Microsoft.CodeAnalysis;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Text;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
-using Autowatchers.Models;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Autowatchers.Wrappers;
 
@@ -23,14 +20,9 @@ internal class GeneratorExecutionContextWrapper
         }
 
         SupportsNullable = csharpParseOptions.LanguageVersion >= LanguageVersion.CSharp8;
-        NullableEnabled = context.Compilation.Options.NullableContextOptions == NullableContextOptions.Enable;
     }
 
     public bool SupportsNullable { get; }
-
-    public bool NullableEnabled { get; }
-
-    public string AssemblyName => _context.Compilation.AssemblyName ?? "Autowatchers";
 
     public void AddSource(string hintName, SourceText sourceText) => _context.AddSource(hintName, sourceText);
 
@@ -46,7 +38,7 @@ internal class GeneratorExecutionContextWrapper
         {
             classSymbol = new ClassSymbol
             {
-                Type = FileDataType.Builder,
+                Type = FileDataType.Class,
                 ClassData = classData,
                 NamedTypeSymbol = symbol
             };
@@ -62,7 +54,7 @@ internal class GeneratorExecutionContextWrapper
 
             classSymbol = new ClassSymbol
             {
-                Type = FileDataType.Builder,
+                Type = FileDataType.Class,
                 ClassData = classData,
                 NamedTypeSymbol = symbol
             };

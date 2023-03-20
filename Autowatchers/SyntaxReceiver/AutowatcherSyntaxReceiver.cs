@@ -1,9 +1,6 @@
-﻿using Microsoft.CodeAnalysis;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Autowatchers.FileGenerators;
+﻿using Autowatchers.FileGenerators;
 using Autowatchers.Models;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Autowatchers.SyntaxReceiver;
@@ -26,9 +23,9 @@ internal class AutowatcherSyntaxReceiver : ISyntaxReceiver
 
         var attributeList = classDeclarationSyntax.AttributeLists
             .FirstOrDefault(x => x.Attributes
-                .Any(a => 
+                .Any(a =>
                     AutowatcherAttributeGenerator.AutowatcherAttributeClassNames.Contains(a.Name.ToString())));
-        
+
         if (attributeList is null)
         {
             // ClassDeclarationSyntax should have the correct attribute
@@ -54,12 +51,11 @@ internal class AutowatcherSyntaxReceiver : ISyntaxReceiver
 
         usings = usings.Distinct().ToList();
 
-        var rawTypeName  = AttributeArgumentListParser.ParseAttributeArguments(attributeList.Attributes.FirstOrDefault()?.ArgumentList);
-        
+        var rawTypeName = attributeList.Attributes.FirstOrDefault()?.ArgumentList.GetToWatchTypeName();
         var modifiers = classDeclarationSyntax.Modifiers.Select(m => m.ToString()).ToArray();
+
         if (!(modifiers.Contains("public") && modifiers.Contains("partial")))
         {
-            // ClassDeclarationSyntax should be "public" & "partial"
             return false;
         }
 
@@ -73,20 +69,6 @@ internal class AutowatcherSyntaxReceiver : ISyntaxReceiver
         };
 
         return true;
-    }
-
-    private static string GetFullType(string ns, ClassDeclarationSyntax classDeclarationSyntax, bool addBuilderPostfix)
-    {
-        var fullBuilderClassName = CreateFullBuilderClassName(ns, classDeclarationSyntax);
-        var type = $"{fullBuilderClassName}{(addBuilderPostfix ? "Builder" : string.Empty)}";
-
-        if (classDeclarationSyntax.TypeParameterList != null)
-        {
-            var list = classDeclarationSyntax.TypeParameterList.Parameters.Select(p => p.Identifier.ToString());
-            return $"{type}<{string.Join(",", list)}>";
-        }
-
-        return type;
     }
 
     private static string CreateFullBuilderClassName(string ns, BaseTypeDeclarationSyntax classDeclarationSyntax)

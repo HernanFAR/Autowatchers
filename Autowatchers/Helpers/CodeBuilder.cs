@@ -1,11 +1,9 @@
 ﻿using Autowatchers.Models;
-using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace Autowatchers.Helpers;
 
-internal class CodeBuilder 
+internal class CodeBuilder
 {
     private readonly StringBuilder _stringBuilder;
 
@@ -16,7 +14,9 @@ internal class CodeBuilder
 
     public CodeBuilder AppendReadOnlyPropertyCode(ClassSymbol classSymbol)
     {
-        _stringBuilder.Append($@"public {classSymbol.NamedTypeSymbol.Name} Observed {{ get; }}");
+        _stringBuilder.Append($@"
+        public {classSymbol.NamedTypeSymbol.Name} Observed {{ get; }}
+        ");
 
         return this;
     }
@@ -32,10 +32,8 @@ internal class CodeBuilder
         return this;
     }
 
-    public CodeBuilder AppendPropertyCode(ClassSymbol classSymbol, out List<string> extraUsings)
+    public CodeBuilder AppendPropertyCode(ClassSymbol classSymbol)
     {
-        extraUsings = new List<string>();
-
         foreach (var property in classSymbol.Properties)
         {
             _stringBuilder.AppendLine($@"

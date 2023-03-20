@@ -1,10 +1,9 @@
-﻿using Autowatchers.SyntaxReceiver;
+﻿using Autowatchers.FileGenerators;
+using Autowatchers.SyntaxReceiver;
 using Autowatchers.Wrappers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 using System.Text;
-using Autowatchers.FileGenerators;
-using Autowatchers.Models;
 
 namespace Autowatchers;
 
