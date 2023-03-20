@@ -3,6 +3,7 @@ using Autowatchers.SyntaxReceiver;
 using Autowatchers.Wrappers;
 using Microsoft.CodeAnalysis;
 using System.Text;
+using Autowatchers.Helpers;
 
 namespace Autowatchers.FileGenerators;
 
@@ -55,38 +56,29 @@ internal class AutowatcherClassesGenerator : IFilesGenerator
 
     private string CreateClassBuilderCode(ClassSymbol classSymbol)
     {
-
-        var constructorCode = new StringBuilder()
-            .AppendConstructorCode(classSymbol);
-
-        var propertiesCode = new StringBuilder()
+        var classCode = new CodeBuilder(new StringBuilder())
+            .AppendReadOnlyPropertyCode(classSymbol)
+            .AppendConstructorCode(classSymbol)
             .AppendPropertyCode(classSymbol, out var extraUsings);
 
-        var usings = SystemUsings.ToList();
-
-        usings.Add($"{_context.AssemblyName}.FluentBuilder");
-        usings.Add($"{classSymbol.NamedTypeSymbol.ContainingNamespace}");
-        usings.AddRange(extraUsings);
+        var usings = SystemUsings.Concat(extraUsings)
+            .ToList();
 
         var usingsAsStrings = string.Join("\r\n", usings.Distinct().Select(u => $"using {u};"));
 
-        return $@" 
-            {Header.Text}
+        return $@"{Header.Text}
 
-            {(_context.SupportsNullable ? "#nullable enable" : string.Empty)}
-            {usingsAsStrings}
+{(_context.SupportsNullable ? "#nullable enable" : string.Empty)}
+{usingsAsStrings}
 
-            namespace {classSymbol.Namespace}
-            {{
-                public partial class {classSymbol.ClassName}
-                {{
-                    {constructorCode}
-
-                    {propertiesCode}
-
-                }}
-            }}
-            {(_context.SupportsNullable ? "#nullable disable" : string.Empty)}
+namespace {classSymbol.Namespace}
+{{
+    public partial class {classSymbol.ClassName}
+    {{
+{classCode}
+    }}
+}}
+{(_context.SupportsNullable ? "#nullable disable" : string.Empty)}
         ";
     }
 }

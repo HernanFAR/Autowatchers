@@ -11,10 +11,18 @@ internal class AutowatcherAttributeGenerator : IFileGenerator
 
     internal static readonly string[] AutowatcherAttributeClassNames =
     {
-        "Autowatchers.WatchAttribute",
-        "WatchAttribute",
-        "Autowatchers.WatchIgnoreAttribute",
-        "WatchIgnoreAttribute"
+        "Autowatchers.AutoWatchAttribute",
+        "AutoWatchAttribute",
+        "Autowatchers.AutoWatch",
+        "AutoWatch"
+    };
+
+    internal static readonly string[] AutowatcherExcludeAttributePropertyNames =
+    {
+        "Autowatchers.AutoWatchIgnoreAttribute",
+        "AutoWatchIgnoreAttribute",
+        "Autowatchers.AutoWatchIgnore",
+        "AutoWatchIgnore"
     };
 
     public AutowatcherAttributeGenerator(bool supportsNullable)
@@ -36,18 +44,18 @@ using System;
 namespace Autowatchers
 {{
     [AttributeUsage(AttributeTargets.Class)]
-    internal sealed class WatchAttribute : Attribute
+    internal sealed class AutoWatchAttribute : Attribute
     {{
         public Type ToWatchType {{ get; }}
 
-        public WatchAttribute(Type toWatchType)
+        public AutoWatchAttribute(Type toWatchType)
         {{
             ToWatchType = toWatchType;
         }}
     }}
 
     [AttributeUsage(AttributeTargets.Property)]
-    internal sealed class WatchIgnoreAttribute : Attribute
+    internal sealed class AutoWatchIgnoreAttribute : Attribute
     {{
     }}
 

@@ -1,5 +1,6 @@
 ﻿using Autowatchers.FileGenerators;
 using Microsoft.CodeAnalysis;
+using System.Xml.Linq;
 
 namespace Autowatchers.Models;
 
@@ -17,10 +18,15 @@ internal class ClassSymbol
 
     public INamedTypeSymbol NamedTypeSymbol { get; init; } = null!;
 
-    public string ItemBuilderFullName { get; init; } = string.Empty;
+    public IReadOnlyList<PropertyData> Properties => GetProperties()
+        .Select(e => new PropertyData
+        {
+            FullTypeName = e.Type.ContainingNamespace + "." + e.Type.Name,
+            Name = e.Name
+        })
+        .ToList();
 
-    public IReadOnlyList<IPropertySymbol> GetProperties(
-        )
+    private IEnumerable<IPropertySymbol> GetProperties()
     {
         return NamedTypeSymbol
             .GetMembers()
@@ -30,9 +36,9 @@ internal class ClassSymbol
             .Where(x => x.SetMethod is not null)
             .Where(x => x.SetMethod!.DeclaredAccessibility == Accessibility.Public)
             .Where(x => x.CanBeReferencedByName)
-            .Where(x => !x.GetAttributes()
-                .Any(a => AutowatcherAttributeGenerator.AutowatcherAttributeClassNames.Contains(a.AttributeClass?.OriginalDefinition.ToString())))
-            .ToList();
-
+            .Where(p => !p.GetAttributes()
+                .Any(a => 
+                    AutowatcherAttributeGenerator.AutowatcherExcludeAttributePropertyNames.Contains(a.AttributeClass?.OriginalDefinition.ToString())));
+        
     }
 }

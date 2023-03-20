@@ -4,13 +4,12 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <OutputType>Exe</OutputType>
+    <StartupObject>Autowatchers.Net6.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference
-	    Include="..\Autowatchers\Autowatchers.csproj"
-	    OutputItemType="Analyzer"
-	    ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\Autowatchers\Autowatchers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
 </Project>
