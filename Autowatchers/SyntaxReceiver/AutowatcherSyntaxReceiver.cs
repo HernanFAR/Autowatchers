@@ -34,11 +34,11 @@ internal class AutowatcherSyntaxReceiver : ISyntaxReceiver
 
         var usings = new List<string>();
 
-        string ns = classDeclarationSyntax.GetNamespace();
+        var namespaceString = classDeclarationSyntax.GetNamespace();
 
-        if (!string.IsNullOrEmpty(ns))
+        if (!string.IsNullOrEmpty(namespaceString))
         {
-            usings.Add(ns);
+            usings.Add(namespaceString);
         }
 
         if (classDeclarationSyntax.TryGetParentSyntax(out CompilationUnitSyntax? cc))
@@ -51,7 +51,14 @@ internal class AutowatcherSyntaxReceiver : ISyntaxReceiver
 
         usings = usings.Distinct().ToList();
 
-        var rawTypeName = attributeList.Attributes.FirstOrDefault()?.ArgumentList.GetToWatchTypeName();
+        var attributes = attributeList.Attributes.FirstOrDefault();
+
+        if (attributes is null)
+        {
+            return false;
+        }
+
+        var rawTypeName = attributes.ArgumentList.GetToWatchTypeName();
         var modifiers = classDeclarationSyntax.Modifiers.Select(m => m.ToString()).ToArray();
 
         if (!(modifiers.Contains("public") && modifiers.Contains("partial")))
@@ -61,9 +68,9 @@ internal class AutowatcherSyntaxReceiver : ISyntaxReceiver
 
         data = new ClassData
         {
-            Namespace = ns,
+            Namespace = namespaceString,
             ShortClassName = $"{classDeclarationSyntax.Identifier}",
-            FullClassName = CreateFullBuilderClassName(ns, classDeclarationSyntax),
+            FullClassName = CreateFullBuilderClassName(namespaceString, classDeclarationSyntax),
             MetadataName = ConvertTypeName(rawTypeName),
             Usings = usings,
         };

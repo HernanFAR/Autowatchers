@@ -1,6 +1,6 @@
 ﻿namespace Autowatchers.Models;
 
-internal struct ClassData
+internal readonly struct ClassData
 {
     public string Namespace { get; init; }
 

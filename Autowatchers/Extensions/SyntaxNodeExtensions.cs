@@ -17,11 +17,11 @@ internal static class SyntaxNodeExtensions
     {
         // If we don't have a namespace at all we'll return an empty string
         // This accounts for the "default namespace" case
-        string nameSpace = string.Empty;
+        var nameSpace = string.Empty;
 
         // Get the containing syntax node for the type declaration
         // (could be a nested type, for example)
-        SyntaxNode? potentialNamespaceParent = syntaxNode.Parent;
+        var potentialNamespaceParent = syntaxNode.Parent;
 
         // Keep moving "out" of nested classes etc until we get to a namespace
         // or until we run out of parents
@@ -51,6 +51,11 @@ internal static class SyntaxNodeExtensions
                 nameSpace = $"{namespaceParent.Name}.{nameSpace}";
                 namespaceParent = parent;
             }
+        }
+
+        if (string.IsNullOrEmpty(nameSpace))
+        {
+            throw new ArgumentException("A class with AutowatcherAttribute must have a declared namespace.");
         }
 
         // return the final namespace
