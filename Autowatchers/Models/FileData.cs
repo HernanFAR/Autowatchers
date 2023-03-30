@@ -6,5 +6,5 @@ internal enum FileDataType : byte
 {
     Attribute,
     Class,
-
+    Subclass
 }

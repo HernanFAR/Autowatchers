@@ -1,7 +1,10 @@
 ﻿namespace Autowatchers.Models;
 
-public struct PropertyData
+public readonly struct PropertyData
 {
-    public string FullTypeName { get; init; }
-    public string Name { get; set; }
+    public string FullTypeName => TypeNamespace + "." + Type;
+    public string Name { get; init; }
+    public string Type { get; init; }
+    public bool IsVirtual { get; init; }
+    public string TypeNamespace { get; init; }
 }

@@ -44,9 +44,10 @@ using System;
 namespace Autowatchers
 {{
     [AttributeUsage(AttributeTargets.Class)]
-    internal sealed class AutoWatchAttribute : Attribute
+    public sealed class AutoWatchAttribute : Attribute
     {{
         public Type ToWatchType {{ get; }}
+        public bool DeepWatch {{ get; set; }}
 
         public AutoWatchAttribute(Type toWatchType)
         {{
@@ -55,7 +56,7 @@ namespace Autowatchers
     }}
 
     [AttributeUsage(AttributeTargets.Property)]
-    internal sealed class AutoWatchIgnoreAttribute : Attribute
+    public sealed class AutoWatchIgnoreAttribute : Attribute
     {{
     }}
 

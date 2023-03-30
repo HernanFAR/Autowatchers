@@ -5,51 +5,47 @@ namespace Autowatchers.Helpers;
 
 internal class CodeBuilder
 {
+    private readonly ClassSymbol _classSymbol;
     private readonly StringBuilder _stringBuilder;
+    private readonly PropertyCodeGenerator _propertyCodeGenerator;
 
-    public CodeBuilder(StringBuilder stringBuilder)
+    public CodeBuilder(ClassSymbol classSymbol, PropertyCodeGenerator propertyCodeGenerator)
     {
-        _stringBuilder = stringBuilder;
+        _classSymbol = classSymbol;
+        _propertyCodeGenerator = propertyCodeGenerator;
+        _stringBuilder = new StringBuilder();
     }
 
-    public CodeBuilder AppendReadOnlyPropertyCode(ClassSymbol classSymbol)
+    public CodeBuilder AppendReadOnlyPropertyCode()
     {
         _stringBuilder.Append($@"
-        public {classSymbol.NamedTypeSymbol.Name} Observed {{ get; }}
+        /// <summary>
+        /// The instance to observe
+        /// </summary>
+        public {_classSymbol.TypedClassData.FullTypeName} Observed {{ get; }}
         ");
 
         return this;
     }
 
-    public CodeBuilder AppendConstructorCode(ClassSymbol classSymbol)
+    public CodeBuilder AppendConstructorCode()
     {
         _stringBuilder.Append($@"
-        public {classSymbol.ClassName}({classSymbol.NamedTypeSymbol.Name} observed) 
+        /// <summary>
+        /// A <see cref=""{_classSymbol.FullName}"" /> constructor
+        /// </summary>
+        public {_classSymbol.ClassName}({_classSymbol.TypedClassData.FullTypeName} observed) 
         {{
             Observed = observed;
-        }}");
+        }}
+        ");
 
         return this;
     }
 
-    public CodeBuilder AppendPropertyCode(ClassSymbol classSymbol)
+    public CodeBuilder AppendPropertyCode()
     {
-        foreach (var property in classSymbol.Properties)
-        {
-            _stringBuilder.AppendLine($@"
-        public event Action<{property.FullTypeName}, {property.FullTypeName}>? {property.Name}Changed;
-
-        public {property.FullTypeName} {property.Name} 
-        {{
-            get => Observed.{property.Name};
-            set 
-            {{
-                {property.Name}Changed?.Invoke(Observed.{property.Name}, value);
-
-                Observed.{property.Name} = value;
-            }}
-        }}");
-        }
+        _stringBuilder.AppendLine(_propertyCodeGenerator[_classSymbol.ClassData.ClassType](_classSymbol));
 
         return this;
     }

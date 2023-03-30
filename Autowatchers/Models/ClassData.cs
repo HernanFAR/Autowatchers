@@ -12,4 +12,8 @@ internal readonly struct ClassData
 
     public List<string> Usings { get; init; }
 
+    public EClassType ClassType { get; init; }
+
+    public string? OuterClassName { get; init; }
+
 }

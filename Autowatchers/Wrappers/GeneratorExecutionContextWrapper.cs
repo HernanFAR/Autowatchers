@@ -1,4 +1,5 @@
-﻿using Autowatchers.Models;
+﻿using Autowatchers.FileGenerators;
+using Autowatchers.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
@@ -40,7 +41,33 @@ internal class GeneratorExecutionContextWrapper
             {
                 Type = FileDataType.Class,
                 ClassData = classData,
-                NamedTypeSymbol = symbol
+                TypedClassData = new TypedClassData
+                {
+                    IsSealed = symbol.IsSealed,
+                    Name = symbol.Name,
+                    Namespace = symbol.GetFullNamespace(),
+                    Properties = symbol
+                        .GetMembers()
+                        .OfType<IPropertySymbol>()
+                        .Where(x => x.GetMethod is not null)
+                        .Where(x => x.GetMethod!.DeclaredAccessibility == Accessibility.Public)
+                        .Where(x => x.SetMethod is not null)
+                        .Where(x => x.SetMethod!.DeclaredAccessibility == Accessibility.Public)
+                        .Where(x => !x.SetMethod!.IsInitOnly)
+                        .Where(x => x.CanBeReferencedByName)
+                        .Where(p => !p.GetAttributes()
+                            .Any(a =>
+                                AutowatcherAttributeGenerator.AutowatcherExcludeAttributePropertyNames.Contains(a.AttributeClass?.OriginalDefinition.ToString())))
+                        .Select(e => 
+                            new PropertyData
+                            {
+                                TypeNamespace = e.GetTypeFullNamespace(),
+                                Type = e.Type.MetadataName,
+                                Name = e.Name,
+                                IsVirtual = e.IsVirtual
+                            })
+                        .ToList()
+                }
             };
             return true;
         }
@@ -48,7 +75,8 @@ internal class GeneratorExecutionContextWrapper
 
         foreach (var @using in classData.Usings)
         {
-            symbol = _context.Compilation.GetTypeByMetadataName($"{@using}.{classData.MetadataName}");
+            symbol = _context.Compilation
+                .GetTypeByMetadataName($"{@using}.{classData.MetadataName}");
 
             if (symbol is null) continue;
 
@@ -56,7 +84,32 @@ internal class GeneratorExecutionContextWrapper
             {
                 Type = FileDataType.Class,
                 ClassData = classData,
-                NamedTypeSymbol = symbol
+                TypedClassData = new TypedClassData
+                {
+                    IsSealed = symbol.IsSealed,
+                    Name = symbol.Name,
+                    Namespace = symbol.GetFullNamespace(),
+                    Properties = symbol
+                        .GetMembers()
+                        .OfType<IPropertySymbol>()
+                        .Where(x => x.GetMethod is not null)
+                        .Where(x => x.GetMethod!.DeclaredAccessibility == Accessibility.Public)
+                        .Where(x => x.SetMethod is not null)
+                        .Where(x => x.SetMethod!.DeclaredAccessibility == Accessibility.Public)
+                        .Where(x => !x.SetMethod!.IsInitOnly)
+                        .Where(x => x.CanBeReferencedByName)
+                        .Where(p => !p.GetAttributes()
+                            .Any(a =>
+                                AutowatcherAttributeGenerator.AutowatcherExcludeAttributePropertyNames.Contains(a.AttributeClass?.OriginalDefinition.ToString())))
+                        .Select(e => new PropertyData
+                        {
+                            TypeNamespace = e.GetTypeFullNamespace(),
+                            Type = e.Type.MetadataName,
+                            Name = e.Name,
+                            IsVirtual = e.IsVirtual
+                        })
+                        .ToList()
+                }
             };
 
             return true;

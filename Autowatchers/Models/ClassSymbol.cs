@@ -13,31 +13,8 @@ internal class ClassSymbol
 
     public string ClassName => ClassData.ShortClassName;
 
-    public string FullClassName => ClassData.FullClassName;
+    public string FullName => ClassData.FullClassName;
 
-    public INamedTypeSymbol NamedTypeSymbol { get; init; } = null!;
-
-    public IReadOnlyList<PropertyData> Properties => GetProperties()
-        .Select(e => new PropertyData
-        {
-            FullTypeName = e.Type.ContainingNamespace + "." + e.Type.Name,
-            Name = e.Name
-        })
-        .ToList();
-
-    private IEnumerable<IPropertySymbol> GetProperties()
-    {
-        return NamedTypeSymbol
-            .GetMembers()
-            .OfType<IPropertySymbol>()
-            .Where(x => x.GetMethod is not null)
-            .Where(x => x.GetMethod!.DeclaredAccessibility == Accessibility.Public)
-            .Where(x => x.SetMethod is not null)
-            .Where(x => x.SetMethod!.DeclaredAccessibility == Accessibility.Public)
-            .Where(x => x.CanBeReferencedByName)
-            .Where(p => !p.GetAttributes()
-                .Any(a =>
-                    AutowatcherAttributeGenerator.AutowatcherExcludeAttributePropertyNames.Contains(a.AttributeClass?.OriginalDefinition.ToString())));
-
-    }
+    public TypedClassData TypedClassData { get; init; } = default!;
+    
 }

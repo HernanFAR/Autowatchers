@@ -62,6 +62,14 @@ internal static class SyntaxNodeExtensions
         return nameSpace;
     }
 
+    public static string? GetOuterClass(this SyntaxNode syntaxNode)
+    {
+        if (syntaxNode.Parent is ClassDeclarationSyntax classDeclaration) return classDeclaration.Identifier.ValueText;
+        
+        return null;
+    } 
+
+
 
     // https://stackoverflow.com/questions/20458457/getting-class-fullname-including-namespace-from-roslyn-classdeclarationsyntax
     public static bool TryGetParentSyntax<T>(this SyntaxNode? syntaxNode, [NotNullWhen(true)] out T? result) where T : SyntaxNode
