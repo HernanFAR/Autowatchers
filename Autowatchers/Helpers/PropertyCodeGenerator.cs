@@ -49,7 +49,10 @@ internal class PropertyCodeGenerator
             get => Observed.{property.Name};
             set 
             {{
-                {property.Name}Changed?.Invoke(Observed.{property.Name}, value);
+                if(Observed.{property.Name}.Equals(value))
+                {{
+                    {property.Name}Changed?.Invoke(Observed.{property.Name}, value);
+                }}
 
                 Observed.{property.Name} = value;
             }}

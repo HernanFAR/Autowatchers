@@ -9,7 +9,7 @@
 	  <Title>Autowatchers</Title>
 	  <PackageId>Autowatchers</PackageId>
 	  <Description>This project uses Source Generation to create classes like to Vue.js Watchers in C#.</Description>
-	  <PackageTags>watcher;SourceGenerator;Generation;Generate</PackageTags>
+	  <PackageTags>Watcher;SourceGenerator;Generation;Generate</PackageTags>
 	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
 
 	  <IsRoslynComponent>true</IsRoslynComponent>
@@ -19,10 +19,7 @@
 	  <IncludeBuildOutput>false</IncludeBuildOutput>
 	  <DevelopmentDependency>true</DevelopmentDependency>
 	  <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -50,11 +47,6 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<None Remove="bin\Debug\netstandard2.0\Autowatchers.dll" />
+		<None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<None Include="$(OutputPath)\netstandard2.0\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
-	</ItemGroup>
-
 </Project>

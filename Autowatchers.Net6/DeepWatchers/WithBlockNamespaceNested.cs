@@ -18,10 +18,10 @@ namespace Autowatchers.Net6.DeepWatchers
 
         }
 
-        public void NameFunc(DummyClass oldValue, DummyClass newValue)
+        public void NameFunc(DummyClass oldValue, DummyClass newValue, string? propertyName)
         {
-            _logger.LogInformation("Se ha escrito la propiedad GetSetString: Nuevo valor: {NewValue} y antiguo valor: {OldValue}.", 
-                newValue, oldValue);
+            _logger.LogInformation("Se ha escrito la propiedad {PropertyName}: Nuevo valor: {NewValue} y antiguo valor: {OldValue}.", 
+                propertyName, newValue, oldValue);
         }
         
         public void Test()
