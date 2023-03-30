@@ -28,13 +28,19 @@ namespace Autowatchers.Net7.DeepWatchers
                 propertyName, JsonSerializer.Serialize(newValue), JsonSerializer.Serialize(oldValue));
         }
         
-        public void Test1()
+        public void Test1ThatModifies()
         {
             DummyWatch.GetSetString = NewName;
 
         }
         
-        public void Test2()
+        public void Test1ThatDoNotModifies()
+        {
+            DummyWatch.GetSetString = DummyWatch.GetSetString;
+
+        }
+        
+        public void Test2ThatModifies()
         {
             DummyWatch.NestedClass = new NestedClass
             {
@@ -43,6 +49,12 @@ namespace Autowatchers.Net7.DeepWatchers
                 GetSetGuid = Guid.NewGuid(),
                 GetSetInt = 30
             };
+
+        }
+
+        public void Test2ThatDoNotModifies()
+        {
+            DummyWatch.NestedClass = DummyWatch.NestedClass;
 
         }
 

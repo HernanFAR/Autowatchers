@@ -26,9 +26,15 @@ namespace Autowatchers.Net7.NormalWatchers
                 newValue, oldValue);
         }
         
-        public void Test()
+        public void TestThatModifies()
         {
             DummyWatch.GetSetString = "NewName";
+
+        }
+
+        public void TestThatDoNotModifies()
+        {
+            DummyWatch.GetSetString = DummyWatch.GetSetString;
 
         }
 

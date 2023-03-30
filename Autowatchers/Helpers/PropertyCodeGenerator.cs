@@ -49,7 +49,7 @@ internal class PropertyCodeGenerator
             get => Observed.{property.Name};
             set 
             {{
-                if(Observed.{property.Name}.Equals(value))
+                if (!Observed.{property.Name}.Equals(value))
                 {{
                     {property.Name}Changed?.Invoke(Observed.{property.Name}, value);
                 }}
@@ -97,14 +97,24 @@ internal class PropertyCodeGenerator
             get => Observed.{property.Name};
             set 
             {{
-                var shallowCopy = System.Text.Json.JsonSerializer.Deserialize<{classSymbol.TypedClassData.FullTypeName}>(System.Text.Json.JsonSerializer.Serialize(Observed));
+                if (!Observed.{property.Name}.Equals(value))
+                {{
+                    var beforeCopy = System.Text.Json.JsonSerializer.Deserialize<{classSymbol.TypedClassData.FullTypeName}>(System.Text.Json.JsonSerializer.Serialize(Observed));
 
-                if (shallowCopy is null) throw new InvalidOperationException(nameof(shallowCopy));
+                    Observed.{property.Name} = value;
 
-                Observed.{property.Name} = value;
-                
-                PropertyChanged?.Invoke(shallowCopy, Observed, nameof({property.Name}));
+                    var afterCopy = System.Text.Json.JsonSerializer.Deserialize<{classSymbol.TypedClassData.FullTypeName}>(System.Text.Json.JsonSerializer.Serialize(Observed));
+    
+                    if (beforeCopy is null) throw new InvalidOperationException(nameof(beforeCopy));
+                    if (afterCopy is null) throw new InvalidOperationException(nameof(afterCopy));
 
+                    
+                    PropertyChanged?.Invoke(beforeCopy, afterCopy, nameof({property.Name}));
+                }}
+                else 
+                {{                
+                    Observed.{property.Name} = value;
+                }}
             }}
         }}
         ");
