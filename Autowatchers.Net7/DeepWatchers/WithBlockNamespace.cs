@@ -9,7 +9,18 @@ namespace Autowatchers.Net7.DeepWatchers
 
         private WithBlockNamespaceWatch DummyWatch { get; }
         public DummyClass DummyClass { get; }
+
+        public const string OldName = nameof(Net7.DummyClass.GetSetString);
         public const string NewName = nameof(NewName);
+
+        public static readonly NestedClass OldNestedValue = DummyClass.CurrentNestedClassValue;
+        public static readonly NestedClass NewNestedValue = new ()
+        {
+            GetSetDecimal = 10,
+            GetSetDouble = 20,
+            GetSetGuid = Guid.NewGuid(),
+            GetSetInt = 30
+        };
 
         public WithBlockNamespace(ILogger<WithBlockNamespace> logger)
         {
@@ -42,13 +53,7 @@ namespace Autowatchers.Net7.DeepWatchers
         
         public void Test2ThatModifies()
         {
-            DummyWatch.NestedClass = new NestedClass
-            {
-                GetSetDecimal = 10,
-                GetSetDouble =20,
-                GetSetGuid = Guid.NewGuid(),
-                GetSetInt = 30
-            };
+            DummyWatch.NestedClass = NewNestedValue;
 
         }
 

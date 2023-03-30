@@ -20,6 +20,9 @@ public class EventIntegrationTests
         @object.Test1ThatModifies();
 
         // Assert
+        Assert.Equal(Net7.DeepWatchers.WithBlockNamespace.NewName, @object.DummyClass.GetSetString);
+        Assert.Equal(Net7.DeepWatchers.WithBlockNamespace.OldNestedValue, @object.DummyClass.NestedClass);
+
         var afterString = JsonSerializer.Serialize(@object.DummyClass);
 
         loggerMock.Verify(
@@ -45,6 +48,9 @@ public class EventIntegrationTests
         @object.Test1ThatDoNotModifies();
 
         // Assert
+        Assert.Equal(Net7.DeepWatchers.WithBlockNamespace.OldName, @object.DummyClass.GetSetString);
+        Assert.Equal(Net7.DeepWatchers.WithBlockNamespace.OldNestedValue, @object.DummyClass.NestedClass);
+
         loggerMock.Verify(
             x => x.Log(
                 It.IsAny<LogLevel>(),
@@ -70,6 +76,9 @@ public class EventIntegrationTests
         @object.Test2ThatModifies();
 
         // Assert
+        Assert.Equal(Net7.DeepWatchers.WithBlockNamespace.OldName, @object.DummyClass.GetSetString);
+        Assert.Equal(Net7.DeepWatchers.WithBlockNamespace.NewNestedValue, @object.DummyClass.NestedClass);
+
         var afterString = JsonSerializer.Serialize(@object.DummyClass);
 
         loggerMock.Verify(
@@ -95,6 +104,9 @@ public class EventIntegrationTests
         @object.Test2ThatDoNotModifies();
 
         // Assert
+        Assert.Equal(Net7.DeepWatchers.WithBlockNamespace.OldName, @object.DummyClass.GetSetString);
+        Assert.Equal(Net7.DeepWatchers.WithBlockNamespace.OldNestedValue, @object.DummyClass.NestedClass);
+
         loggerMock.Verify(
             x => x.Log(
                 It.IsAny<LogLevel>(),
@@ -119,6 +131,9 @@ public class EventIntegrationTests
         @object.TestThatModifies();
 
         // Assert
+        Assert.Equal(Net7.DeepWatchers.WithBlockNamespace.NewName, @object.DummyClass.GetSetString);
+        Assert.Equal(Net7.DeepWatchers.WithBlockNamespace.OldNestedValue, @object.DummyClass.NestedClass);
+
         var afterString = @object.DummyClass.GetSetString;
 
         loggerMock.Verify(
@@ -145,6 +160,9 @@ public class EventIntegrationTests
         @object.TestThatDoNotModifies();
 
         // Assert
+        Assert.Equal(Net7.DeepWatchers.WithBlockNamespace.OldName, @object.DummyClass.GetSetString);
+        Assert.Equal(Net7.DeepWatchers.WithBlockNamespace.OldNestedValue, @object.DummyClass.NestedClass);
+
         loggerMock.Verify(
             x => x.Log(
                 It.IsAny<LogLevel>(),

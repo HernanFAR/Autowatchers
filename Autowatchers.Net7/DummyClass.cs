@@ -2,6 +2,8 @@
 
 public class DummyClass
 {
+    public static readonly NestedClass CurrentNestedClassValue = new();
+
     public DummyClass()
     {
         GetSetString = nameof(GetSetString);
@@ -11,7 +13,7 @@ public class DummyClass
         GetString = nameof(GetString);
         IgnoreGetSetString = nameof(IgnoreGetSetString);
 
-        NestedClass = new NestedClass();
+        NestedClass = CurrentNestedClassValue;
 
     }
 
