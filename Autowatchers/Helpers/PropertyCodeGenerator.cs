@@ -41,8 +41,8 @@ internal class PropertyCodeGenerator
         public event System.Action<{property.FullTypeName}, {property.FullTypeName}>? {property.Name}Changed;
 
         /// <summary>
-        /// Proxy property with get and set to <see cref=""{classSymbol.TypedClassData.FullTypeName}.{property.Name}"" 
-        /// member of the observed class /> 
+        /// Proxy property with get and set to <see cref=""{classSymbol.TypedClassData.FullTypeName}.{property.Name}"" />
+        /// member of the observed class  
         /// </summary>
         public {property.FullTypeName} {property.Name} 
         {{
@@ -86,8 +86,8 @@ internal class PropertyCodeGenerator
         {
             stringBuilder.AppendLine($@"
         /// <summary>
-        /// Proxy property with get and set to <see cref=""{classSymbol.TypedClassData.FullTypeName}.{property.Name}"" 
-        /// member of the observed class /> 
+        /// Proxy property with get and set to <see cref=""{classSymbol.TypedClassData.FullTypeName}.{property.Name}"" /> 
+        /// member of the observed class
         /// </summary>
         public {property.FullTypeName} {property.Name} 
         {{
